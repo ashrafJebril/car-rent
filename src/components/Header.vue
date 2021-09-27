@@ -27,7 +27,7 @@
           <div class="flex items-center mx-2">
             <q-icon name="mail" class="text-white text-3xl pr-2" />
             <div class="border-l border-1 px-2 text-xl">
-              <div>Mail Address</div>
+              <div>{{ $t("Email") }}</div>
               <div>ashraf@rent.com</div>
             </div>
           </div>
@@ -36,7 +36,7 @@
           <div class="flex items-center ml-2">
             <q-icon name="account_circle" class="text-white text-3xl pr-2" />
             <div class="border-l border-1 px-2 text-xl flex flex-col">
-              <div>Social Media</div>
+              <div>{{ $t("Social") }}</div>
               <div class="flex items-center mt-2">
                 <q-icon name="facebook" class="text-white text-1xl mr-2" />
                 <i class="fa fa-instagram mr-2"></i>
