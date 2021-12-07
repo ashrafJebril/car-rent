@@ -11,6 +11,11 @@ const mutations = {
 };
 
 const actions = {
+  async getSubCategories({ commit }) {
+    return await api.get("sub-categories").then((res) => {
+      console.log(res);
+    });
+  },
   async getAllCategories({ commit, dispatch }, payload) {
     return await api.get("categories").then((res) => {
       commit("getAllCategories", res.data);
