@@ -40,4 +40,8 @@ export default defineComponent({
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.max {
+  max-width: 1600px;
+}
 </style>

@@ -1,30 +1,67 @@
 <template>
-  <div class="pt-64 px-8">
-    <div class="flex">
-      <div
-        @click="getSubCategories(category)"
-        class="w-32 h-22 m-2 category cursor-pointer"
-        v-for="(category, index) in allCategories"
-        :key="index"
-      >
-        <div>{{ category.title }}</div>
-        <img
-          v-if="!noCategotyChoosed"
-          :src="'http://localhost:1337' + category.logo.url"
-          alt=""
-          class="w-32 h-22"
-        />
+  <div class="pt-64 px-8 flex justify-center">
+    <div class="max">
+      <div class="flex">
+        <div
+          @click="getSubCategories(category)"
+          class="w-32 h-22 m-2 category cursor-pointer"
+          v-for="(category, index) in allCategories"
+          :key="index"
+        >
+          <div>{{ category.title }}</div>
+          <img
+            v-if="!noCategotyChoosed"
+            :src="'http://localhost:1337' + category.logo.url"
+            alt=""
+            class="w-32 h-22"
+          />
+        </div>
       </div>
-    </div>
-    <div v-if="noCategotyChoosed" class="flex justify-around my-16">
-      <div v-for="sub in subCategories" :key="sub.id" class="category">
-        <div>{{ sub.title }}</div>
-        <img
-          v-if="!noCategotyChoosed"
-          :src="'http://localhost:1337' + sub.logo.url"
-          alt=""
-          class="w-32 h-22"
-        />
+      <div v-if="noCategotyChoosed" class="flex justify-around my-16">
+        <div v-for="sub in subCategories" :key="sub.id" class="category">
+          <div @click="getCarList(sub.id)">{{ sub.title }}</div>
+          <img
+            v-if="!noCategotyChoosed"
+            :src="'http://localhost:1337' + sub.logo.url"
+            alt=""
+            class="w-32 h-22"
+          />
+        </div>
+      </div>
+      <div class="shadow-lg w-1/4" v-if="noCarListChoosed">
+        <div v-for="car in carsList">
+          <img src="http://localhost:1337/uploads/tt_168f430a10.png" alt="" />
+          <div class="p-2">
+            <div class="flex">
+              <div>Price for a day :</div>
+              <div>{{ car.price }}JD</div>
+            </div>
+            <div class="flex mt-2">
+              <div>Car Model :</div>
+              <div>{{ car.model }}</div>
+            </div>
+
+            <div class="flex my-2">
+              Description :
+              {{ car.description }}
+            </div>
+
+            <div class="flex">
+              <div>Color :</div>
+              <div>{{ car.color }}</div>
+            </div>
+
+            <div class="flex my-2">
+              <div>Fuel :</div>
+              <div>{{ car.fuel }}</div>
+            </div>
+
+            <div class="flex">
+              <div>Transmission :</div>
+              <div>{{ car.Transmission }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -36,11 +73,12 @@ export default {
   data() {
     return {
       subCategories: {},
+      noCarListChoosed: false,
       noCategotyChoosed: false,
     };
   },
   computed: {
-    ...mapGetters(["allCategories"]),
+    ...mapGetters(["allCategories", "carsList"]),
   },
   async created() {
     await this.getAllCategories();
@@ -49,8 +87,12 @@ export default {
     ...mapActions(["getAllCategories", "getSubCategoryById"]),
     getSubCategories(payload) {
       this.subCategories = payload.sub_categories;
-      console.log(this.subCategories);
+      this.noCarListChoosed = false;
       this.noCategotyChoosed = true;
+    },
+    getCarList(id) {
+      this.getSubCategoryById(id);
+      this.noCarListChoosed = true;
     },
   },
 };
