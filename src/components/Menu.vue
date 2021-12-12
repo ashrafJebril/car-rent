@@ -2,42 +2,43 @@
   <div
     class="
       bg-white
-      w-3/4
+      w-full
       h-16
       -mt-4
       rounded
       shadow-2xl
       flex
-      justify-between
+      justify-center
       items-center
       px-4
     "
   >
-    <div class="flex">
-      <router-link to="/">
+    <div class="w-4/5 flex justify-between">
+      <div class="flex text-black">
+        <router-link to="/">
+          <div class="flex items-center text-xl cursor-pointer">
+            <q-icon name="home" class="text-gray-300 text-2xl mr-2" />
+            <div class="hover">{{ $t("Home") }}</div>
+          </div>
+        </router-link>
         <div class="flex items-center text-xl cursor-pointer">
-          <q-icon name="home" class="text-gray-300 text-2xl mr-2" />
-          <div class="hover">{{ $t("Home") }}</div>
+          <q-icon name="info" class="text-gray-300 text-2xl mx-2" />
+          <div>{{ $t("About") }}</div>
         </div>
-      </router-link>
-      <div class="flex items-center text-xl cursor-pointer">
-        <q-icon name="info" class="text-gray-300 text-2xl mx-2" />
-        <div>{{ $t("About") }}</div>
-      </div>
-      <router-link to="/booking">
-        <div class="flex items-center text-xl cursor-pointer">
+
+        <div class="flex items-center text-xl cursor-pointer" @click="moveTo()">
           <q-icon name="book" class="text-gray-300 text-2xl mx-2" />
           <div class="hover">{{ $t("Cars") }}</div>
         </div>
-      </router-link>
-    </div>
-    <div class="text-xl flex">
-      <div class="flex flex-nowrap bg-white rounded-full mr-1 dropdown">
-        <img src="../../images/england.png" class="w-8 h-8" alt="" />
-        <div>English</div>
-        <div class="dropdown-content p-4">
-          <div @click="changeLang('ar')" class="cursor-pointer">Arabic</div>
-          <div @click="changeLang('en')" class="cursor-pointer">English</div>
+      </div>
+      <div class="text-xl flex">
+        <div class="flex flex-nowrap bg-white rounded-full mr-1 dropdown">
+          <img src="../../images/england.png" class="w-8 h-8" alt="" />
+          <div>English</div>
+          <div class="dropdown-content p-4">
+            <div @click="changeLang('ar')" class="cursor-pointer">Arabic</div>
+            <div @click="changeLang('en')" class="cursor-pointer">English</div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,13 +46,19 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters(["language"]),
+  },
   created() {
     console.log(this.$i18n);
   },
   methods: {
+    moveTo() {
+      this.$router.push(`/${this.language}/booking`);
+    },
     ...mapActions(["changeLanguage"]),
     changeLang(lan) {
       this.changeLanguage(lan);

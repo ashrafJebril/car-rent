@@ -1,4 +1,5 @@
 import { api } from "boot/axios";
+import { LocalStorage } from "quasar";
 
 const state = {
   language: "en",
@@ -7,6 +8,7 @@ const state = {
 const mutations = {
   changeLanguage(state, payload) {
     state.language = payload;
+    LocalStorage.set("language", state.language);
   },
 };
 

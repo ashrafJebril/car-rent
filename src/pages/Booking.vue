@@ -17,7 +17,10 @@
           />
         </div>
       </div>
-      <div v-if="noCategotyChoosed" class="flex justify-around my-16">
+      <div
+        v-if="noCategotyChoosed"
+        class="flex justify-around my-16 cursor-pointer"
+      >
         <div v-for="sub in subCategories" :key="sub.id" class="category">
           <div @click="getCarList(sub.id)">{{ sub.title }}</div>
           <img
@@ -28,37 +31,44 @@
           />
         </div>
       </div>
-      <div class="shadow-lg w-1/4" v-if="noCarListChoosed">
-        <div v-for="car in carsList">
-          <img src="http://localhost:1337/uploads/tt_168f430a10.png" alt="" />
-          <div class="p-2">
-            <div class="flex">
-              <div>Price for a day :</div>
-              <div>{{ car.price }}JD</div>
-            </div>
-            <div class="flex mt-2">
-              <div>Car Model :</div>
-              <div>{{ car.model }}</div>
-            </div>
+      <div class="flex mb-16">
+        <div class="cursor-pointer flex" v-if="noCarListChoosed">
+          <div
+            class="shadow-lg w-1/4 mx-2"
+            v-for="(car, index) in carsList"
+            :key="index"
+            @click="moveTo(car)"
+          >
+            <img :src="`http://localhost:1337${car.images[0].url}`" alt="" />
+            <div class="p-2">
+              <div class="flex">
+                <div>Price for a day :</div>
+                <div>{{ car.price }}JD</div>
+              </div>
+              <div class="flex mt-2">
+                <div>Car Model :</div>
+                <div>{{ car.model }}</div>
+              </div>
 
-            <div class="flex my-2">
-              Description :
-              {{ car.description }}
-            </div>
+              <div class="flex my-2">
+                Description :
+                {{ car.description }}
+              </div>
 
-            <div class="flex">
-              <div>Color :</div>
-              <div>{{ car.color }}</div>
-            </div>
+              <div class="flex">
+                <div>Color :</div>
+                <div>{{ car.color }}</div>
+              </div>
 
-            <div class="flex my-2">
-              <div>Fuel :</div>
-              <div>{{ car.fuel }}</div>
-            </div>
+              <div class="flex my-2">
+                <div>Fuel :</div>
+                <div>{{ car.fuel }}</div>
+              </div>
 
-            <div class="flex">
-              <div>Transmission :</div>
-              <div>{{ car.Transmission }}</div>
+              <div class="flex">
+                <div>Transmission :</div>
+                <div>{{ car.Transmission }}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -78,13 +88,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["allCategories", "carsList"]),
+    ...mapGetters(["allCategories", "carsList", "language"]),
   },
   async created() {
     await this.getAllCategories();
   },
   methods: {
-    ...mapActions(["getAllCategories", "getSubCategoryById"]),
+    async moveTo(data) {
+      this.$router.push(`/${this.language}/booking/submit/${data.id}`);
+    },
+    ...mapActions(["getAllCategories", "getSubCategoryById", "bookingForm"]),
     getSubCategories(payload) {
       this.subCategories = payload.sub_categories;
       this.noCarListChoosed = false;

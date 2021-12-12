@@ -1,12 +1,17 @@
 const routes = [
   {
-    path: "/",
+    path: "/:lang",
     component: () => import("layouts/MainLayout.vue"),
   },
 
   {
-    path: "/booking",
+    path: "/:lang/booking",
     component: () => import("pages/Booking.vue"),
+  },
+
+  {
+    path: "/:lang/booking/submit/:id",
+    component: () => import("pages/Submit.vue"),
   },
 
   // Always leave this as last one,

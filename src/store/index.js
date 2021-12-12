@@ -2,6 +2,8 @@ import { store } from "quasar/wrappers";
 import { createStore } from "vuex";
 import category from "./categories-store";
 import generals from "./general-store";
+import booking from "./booking";
+import cars from "./cars";
 
 // import example from './module-example'
 
@@ -20,6 +22,8 @@ export default store(function (/* { ssrContext } */) {
       // example
       category,
       generals,
+      booking,
+      cars,
     },
 
     // enable strict mode (adds overhead!)
