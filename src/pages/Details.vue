@@ -2,31 +2,14 @@
   <div class="pt-64 w-full flex flex-col items-center mb-16">
     <div class="w-64 w-4/5 flex justify-between">
       <div class="w-1/2">
-        <h2 class="text-xl mb-16">Please fill your data to submit</h2>
+        <h2 class="text-xl mb-16">car Details</h2>
         <div class="w-2/3 mb-3">
-          <div class="mb-1">Full Name</div>
-          <q-input outlined />
+          <div class="mb-1">Model</div>
+          <q-input outlined v-model="model" disable />
         </div>
         <div class="w-2/3 mb-3">
-          <div class="mb-1">Email</div>
-          <q-input outlined />
-        </div>
-
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Days</div>
-          <q-input outlined @focus="openTheCalendar" v-model="days" />
-          <q-date
-            v-model="date"
-            range
-            v-if="openCalendar"
-            class="absolute z-10"
-          />
-        </div>
-
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Date of birth</div>
-          <q-input outlined v-model="birth" @focus="openBirth = true" />
-          <q-date v-model="birth" default-view="Years" v-if="openBirth" />
+          <div class="mb-1">Description</div>
+          <q-input outlined v-model="description" disable type="textarea" />
         </div>
 
         <div class="w-2/3 mb-3">
@@ -41,12 +24,14 @@
           <div class="mb-1">Price by Day</div>
           <q-input outlined v-model="price" disable />
         </div>
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Total</div>
-          <q-input outlined v-model="totalWithCommession" disable />
-        </div>
       </div>
       <div class="w-1/2 flex justify-end">
+        <button
+          @click="moveTo('book')"
+          class="bg-blue-900 text-white h-8 rounded px-6 mb-6"
+        >
+          Book Now
+        </button>
         <div v-if="bookedCar">
           <img
             class="w-full"
@@ -111,17 +96,22 @@ export default {
   },
   async created() {
     await this.getCarById(this.$route.params.id);
-
+    this.model = this.bookedCar.model;
     this.color = this.bookedCar.color;
     this.fuel = this.bookedCar.fuel;
     this.price = this.bookedCar.price;
+    this.description = this.bookedCar.description;
+    console.log(this.bookedCar);
     this.choosedImage = this.bookedCar.images[0].url;
   },
 
   computed: {
-    ...mapGetters(["booking", "bookedCar"]),
+    ...mapGetters(["booking", "bookedCar", "language"]),
   },
   methods: {
+    moveTo(path) {
+      this.$router.push(`${this.$route.path}/${path}`);
+    },
     passImage(image) {
       this.choosedImage = image.url;
 

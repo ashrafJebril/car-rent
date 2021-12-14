@@ -39,10 +39,10 @@ export default defineComponent({
       LocalStorage.set("language", newData);
       if (newData == "ar") {
         this.$i18n.locale = "ar";
-        this.$router.push(`${this.language}`);
+        this.$router.push(`/${this.language}`);
       } else {
         this.$i18n.locale = "en";
-        this.$router.push(`${this.language}`);
+        this.$router.push(`/${this.language}`);
       }
       console.log("new", newData);
     },

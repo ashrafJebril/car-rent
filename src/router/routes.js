@@ -5,13 +5,16 @@ const routes = [
   },
 
   {
-    path: "/:lang/booking",
-    component: () => import("pages/Booking.vue"),
+    path: "/:lang/cars",
+    component: () => import("src/pages/Cars.vue"),
   },
-
   {
-    path: "/:lang/booking/submit/:id",
-    component: () => import("pages/Submit.vue"),
+    path: "/:lang/cars/details/:id/book",
+    component: () => import("src/pages/Booking.vue"),
+  },
+  {
+    path: "/:lang/cars/details/:id",
+    component: () => import("src/pages/Details.vue"),
   },
 
   // Always leave this as last one,

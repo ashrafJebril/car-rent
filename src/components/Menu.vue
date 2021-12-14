@@ -15,18 +15,23 @@
   >
     <div class="w-4/5 flex justify-between">
       <div class="flex text-black">
-        <router-link to="/">
-          <div class="flex items-center text-xl cursor-pointer">
-            <q-icon name="home" class="text-gray-300 text-2xl mr-2" />
-            <div class="hover">{{ $t("Home") }}</div>
-          </div>
-        </router-link>
+        <div
+          class="flex items-center text-xl cursor-pointer"
+          @click="moveTo('')"
+        >
+          <q-icon name="home" class="text-gray-300 text-2xl mr-2" />
+          <div class="hover">{{ $t("Home") }}</div>
+        </div>
+
         <div class="flex items-center text-xl cursor-pointer">
           <q-icon name="info" class="text-gray-300 text-2xl mx-2" />
           <div>{{ $t("About") }}</div>
         </div>
 
-        <div class="flex items-center text-xl cursor-pointer" @click="moveTo()">
+        <div
+          class="flex items-center text-xl cursor-pointer"
+          @click="moveTo('cars')"
+        >
           <q-icon name="book" class="text-gray-300 text-2xl mx-2" />
           <div class="hover">{{ $t("Cars") }}</div>
         </div>
@@ -56,8 +61,8 @@ export default {
     console.log(this.$i18n);
   },
   methods: {
-    moveTo() {
-      this.$router.push(`/${this.language}/booking`);
+    moveTo(path) {
+      this.$router.push(`/${this.language}/${path}`);
     },
     ...mapActions(["changeLanguage"]),
     changeLang(lan) {
