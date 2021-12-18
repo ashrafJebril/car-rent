@@ -1,53 +1,84 @@
 <template>
   <div class="pt-64 w-full flex flex-col items-center mb-16">
     <div class="w-64 w-4/5 flex justify-between">
-      <div class="w-1/2">
-        <h2 class="text-xl mb-16">Book your car</h2>
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Full Name</div>
-          <q-input outlined v-model="name" @focus="closeAllCalendar()" />
-        </div>
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Email</div>
-          <q-input outlined v-model="email" @focus="closeAllCalendar()" />
-        </div>
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Days</div>
-          <q-input outlined @focus="openDaysCalendar()" v-model="days" />
-          <q-date
-            v-model="date"
-            range
-            v-if="openCalendar"
-            class="absolute z-10"
-          />
-        </div>
+      <form @submit.prevent="sendToStrapi">
+        <div class="w-1/2">
+          <h2 class="text-xl mb-16">Book your car</h2>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Full Name</div>
+            <q-input outlined v-model="name" @focus="closeAllCalendar()" />
+          </div>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Email</div>
+            <q-input outlined v-model="email" @focus="closeAllCalendar()" />
+          </div>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Days</div>
+            <q-input outlined @focus="openDaysCalendar()" v-model="days" />
+            <q-date
+              v-model="date"
+              range
+              v-if="openCalendar"
+              class="absolute z-10"
+            />
+          </div>
 
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Date of birth</div>
-          <q-input outlined v-model="birth" @focus="openBirthCalendar()" />
-          <q-date
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Age</div>
+            <q-input outlined v-model="age" @focus="closeAllCalendar()" />
+          </div>
+
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Phone Number</div>
+            <q-input outlined v-model="phone" @focus="closeAllCalendar()" />
+          </div>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Gender</div>
+
+            <q-radio v-model="gender" val="male" label="Male" />
+            <q-radio v-model="gender" val="female" label="Female" />
+          </div>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Address</div>
+            <q-input outlined v-model="adress" @focus="closeAllCalendar()" />
+            <!-- <q-date
             v-model="birth"
             default-view="Years"
             v-if="openBirth"
             class="absolute z-10"
-          />
-        </div>
+          /> -->
+          </div>
+          <div>
+            <label for="userfile">Upload file:</label>
+            <input type="file" name="image" @change="onfileChange" />
+          </div>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Price by Day</div>
+            <q-input outlined v-model="price" disable />
+          </div>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Delivery Time</div>
+            <q-input outlined @focus="openTimeCalendar()" v-model="time" />
+            <q-time v-model="time" v-if="openTime" />
+          </div>
+          <div class="w-2/3 mb-3">
+            <div class="mb-1">Delivery notes</div>
+            <q-input outlined v-model="notes" />
+          </div>
+          <div class="w-2/3 mb-3" @focus="closeAllCalendar()">
+            <div class="mb-1">Total</div>
+            <q-input outlined v-model="totalWithCommession" disable />
+          </div>
 
-        <div class="w-2/3 mb-3">
-          <div class="mb-1">Price by Day</div>
-          <q-input outlined v-model="price" disable />
+          <button
+            type="submit"
+            class="bg-blue-900 text-white h-8 rounded px-6"
+            @click="bookTheCar()"
+          >
+            Submit
+          </button>
         </div>
-        <div class="w-2/3 mb-3" @focus="closeAllCalendar()">
-          <div class="mb-1">Total</div>
-          <q-input outlined v-model="totalWithCommession" disable />
-        </div>
-        <button
-          @click="moveTo('book')"
-          class="bg-blue-900 text-white h-8 rounded px-6"
-        >
-          Submit
-        </button>
-      </div>
+      </form>
       <div class="w-1/2 flex justify-end" @click="closeAllCalendar()"></div>
     </div>
   </div>
@@ -59,6 +90,10 @@ export default {
   watch: {
     birth() {
       this.openBirth = false;
+    },
+
+    time() {
+      this.openTime = false;
     },
     date: {
       handler(val) {
@@ -77,14 +112,22 @@ export default {
       name: "",
       email: "",
       price: "",
-      birth: "",
+      age: "",
+      openTime: false,
+      phone: "",
+      gender: "",
+      notes: "",
+      upload: "",
+      selectedFile: null,
+      adress: "",
+      time: "",
       days: "",
       openBirth: false,
       choosedImage: "",
       openCalendar: false,
       date: { from: "", to: "" },
       color: "",
-      totalWithCommession: "",
+      totalWithCommession: 0,
     };
   },
   async created() {
@@ -99,9 +142,40 @@ export default {
     ...mapGetters(["booking", "bookedCar", "language"]),
   },
   methods: {
+    onfileChange(event) {
+      this.selectedFile = event.target.files[0];
+    },
+
+    bookTheCar() {
+      // var booking = {
+      //   fullName: this.name,
+      //   age: this.age,
+      //   receivingTime: this.time,
+      //   email: this.email,
+      //   gender: this.gender,
+      //   endDate: new Date(this.date.to).toISOString(),
+      //   startDate: new Date(this.date.from).toISOString(),
+      //   phone: this.phone,
+      //   car: this.$route.params.id,
+      //   bookingDays: this.days,
+      //   totalProfit: this.totalWithCommession,
+      //   address: this.adress,
+      //   deliveryDescription: this.notes,
+      // };
+      let formData = new FormData();
+      console.log(this.selectedFile);
+      console.log("uplea", formData);
+      formData.append("image", this.selectedFile);
+      this.uploadImage(formData);
+      // this.bookACar(booking);
+    },
     openDaysCalendar() {
       this.openBirth = false;
       this.openCalendar = true;
+    },
+    openTimeCalendar() {
+      this.openTime = true;
+      this.openCalendar = false;
     },
     openBirthCalendar() {
       this.openBirth = true;
@@ -136,7 +210,7 @@ export default {
       // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
       return new Date(parts[0], parts[1] - 1, parts[2]); // months are 0-based
     },
-    ...mapActions(["getCarById"]),
+    ...mapActions(["getCarById", "bookACar", "uploadImage"]),
   },
 };
 </script>
