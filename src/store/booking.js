@@ -14,8 +14,9 @@ const mutations = {
 const actions = {
   async bookACar({ commit }, payload) {
     return await api.post(`bookings`, payload).then((res) => {
-      console.log(res);
-      commit("bookACar", res.data);
+      return res
+   
+   
     });
   },
   async uploadImage({ commit }, payload) {

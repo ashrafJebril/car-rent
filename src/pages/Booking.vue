@@ -1,7 +1,7 @@
 <template>
   <div class="pt-64 w-full flex flex-col items-center mb-16">
     <div class="w-64 w-4/5 flex justify-between">
-      <form @submit.prevent="sendToStrapi">
+      <form @submit.prevent="sendToStrapi" class="w-full">
         <div class="w-1/2">
           <h2 class="text-xl mb-16">Book your car</h2>
           <div class="w-2/3 mb-3">
@@ -50,7 +50,12 @@
           </div>
           <div>
             <label for="userfile">Upload file:</label>
-            <input type="file" name="image" @change="onfileChange" />
+            <input
+              type="file"
+              name="image"
+              ref="upload"
+              @change="onfileChange"
+            />
           </div>
           <div class="w-2/3 mb-3">
             <div class="mb-1">Price by Day</div>
@@ -70,11 +75,7 @@
             <q-input outlined v-model="totalWithCommession" disable />
           </div>
 
-          <button
-            type="submit"
-            class="bg-blue-900 text-white h-8 rounded px-6"
-            @click="bookTheCar()"
-          >
+          <button type="submit" class="bg-blue-900 text-white h-8 rounded px-6">
             Submit
           </button>
         </div>
@@ -142,32 +143,40 @@ export default {
     ...mapGetters(["booking", "bookedCar", "language"]),
   },
   methods: {
+    async sendToStrapi() {
+      var booking = {
+        fullName: this.name,
+        age: this.age,
+        receivingTime: this.time,
+        email: this.email,
+        days: this.days,
+        gender: this.gender,
+        endDate: new Date(this.date.to).toISOString(),
+        startDate: new Date(this.date.from).toISOString(),
+        phone: this.phone,
+        car: this.$route.params.id,
+        bookingDays: this.days,
+        totalProfit: this.totalWithCommession,
+        address: this.adress,
+        deliveryDescription: this.notes,
+      };
+      const bookingVar = await this.bookACar(booking);
+      console.log("booking", bookingVar.data.id);
+      this.bookTheCar(bookingVar.data.id);
+    },
     onfileChange(event) {
       this.selectedFile = event.target.files[0];
     },
 
-    bookTheCar() {
-      // var booking = {
-      //   fullName: this.name,
-      //   age: this.age,
-      //   receivingTime: this.time,
-      //   email: this.email,
-      //   gender: this.gender,
-      //   endDate: new Date(this.date.to).toISOString(),
-      //   startDate: new Date(this.date.from).toISOString(),
-      //   phone: this.phone,
-      //   car: this.$route.params.id,
-      //   bookingDays: this.days,
-      //   totalProfit: this.totalWithCommession,
-      //   address: this.adress,
-      //   deliveryDescription: this.notes,
-      // };
+    bookTheCar(payload) {
       let formData = new FormData();
       console.log(this.selectedFile);
-      console.log("uplea", formData);
-      formData.append("image", this.selectedFile);
+      console.log("uplea", this.$refs.upload.files[0]);
+      formData.append("files", this.$refs.upload.files[0]);
+      formData.append("refId", payload);
+      formData.append("ref", "booking");
+      formData.append("field", "DrivingLicense");
       this.uploadImage(formData);
-      // this.bookACar(booking);
     },
     openDaysCalendar() {
       this.openBirth = false;
