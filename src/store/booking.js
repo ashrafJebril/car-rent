@@ -1,5 +1,6 @@
 import { api } from "boot/axios";
 
+import N from "../functions/notify"
 const state = {
   bookingForm: "",
 };
@@ -14,9 +15,11 @@ const mutations = {
 const actions = {
   async bookACar({ commit }, payload) {
     return await api.post(`bookings`, payload).then((res) => {
+      N('Car has been booked succesfuly')
+
       return res
-   
-   
+
+
     });
   },
   async uploadImage({ commit }, payload) {

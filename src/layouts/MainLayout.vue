@@ -2,9 +2,9 @@
 <template >
   <div class="flex flex-col justify-center items-center w-full bg-gray-200">
     <div class="w-full">
-      <div class="flex flex-col justfiy-center items-center home"></div>
+      <div class="flex flex-col justfiy-center items-center home">asgas</div>
     </div>
-    <Filters />
+
     <PopularCars />
     <Statistics />
   </div>

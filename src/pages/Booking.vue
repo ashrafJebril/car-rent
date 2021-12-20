@@ -86,13 +86,10 @@
 </template>
 
 <script>
+import { useQuasar } from "quasar";
 import { mapActions, mapGetters } from "vuex";
 export default {
   watch: {
-    birth() {
-      this.openBirth = false;
-    },
-
     time() {
       this.openTime = false;
     },
@@ -161,8 +158,9 @@ export default {
         deliveryDescription: this.notes,
       };
       const bookingVar = await this.bookACar(booking);
-      console.log("booking", bookingVar.data.id);
-      this.bookTheCar(bookingVar.data.id);
+
+      await this.bookTheCar(bookingVar.data.id);
+      this.$router.push(`/${this.language}/cars`);
     },
     onfileChange(event) {
       this.selectedFile = event.target.files[0];

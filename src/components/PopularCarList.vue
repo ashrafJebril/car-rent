@@ -1,25 +1,38 @@
 <template>
   <div class="flex w-3/4 mt-16">
-    <div
-      class="bg-white w-80 h-96 shadow-2xl rounded-xl my-4 ml-8 hover box"
-      v-for="car in box"
-      :key="car.id"
-    >
-      <div class="w-full p-2">
-        <img :src="car.image" alt="" class="rounded-t-xl w-ful" />
-        <div class="my-1">Company : Thrifty</div>
+    <div v-for="car in sub" :key="car.id">
+      <div v-if="car.cars_lists.length > 0">
+        <div v-for="ad in car.cars_lists">
+          <div
+            v-if="ad.promotion == true"
+            class="bg-white w-80 h-96 shadow-2xl rounded-xl my-4 ml-8 hover box"
+          >
+            <div class="w-full p-2">
+              <img :src="`http://localhost:1337${ad.images[0].url}`" alt="" />
+              <div class="my-1 mt-8">Company : {{ ad.price }}JD</div>
 
-        <div class="my-1">mercedes : E2020</div>
-        <div class="my-1">model : 2020</div>
-        <div class="my-1">color : Blue</div>
-        <div class="my-1">Price : 15</div>
+              <div class="my-1">mercedes : {{ ad.model }}</div>
+              <div class="my-1">model : {{ ad.color }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
+  created() {
+    this.getSubCategory();
+  },
+  computed: {
+    ...mapGetters(["sub"]),
+  },
+  methods: {
+    ...mapActions(["getSubCategory"]),
+  },
   setup() {
     return {
       box: [
