@@ -1,11 +1,11 @@
 <template>
-  <div class="flex w-3/4 mt-16">
+  <div class="flex w-full">
     <div v-for="car in sub" :key="car.id">
       <div v-if="car.cars_lists.length > 0">
         <div v-for="ad in car.cars_lists">
           <div
             v-if="ad.promotion == true"
-            class="bg-white w-80 h-96 shadow-2xl rounded-xl my-4 ml-8 hover box"
+            class="bg-white w-80 h-82 shadow-2xl rounded-xl my-4 hover box"
           >
             <div class="w-full p-2">
               <img :src="`http://localhost:1337${ad.images[0].url}`" alt="" />

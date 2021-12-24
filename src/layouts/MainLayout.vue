@@ -2,10 +2,12 @@
 <template >
   <div class="flex flex-col justify-center items-center w-full bg-gray-200">
     <div class="w-full">
-      <div class="flex flex-col justfiy-center items-center home">asgas</div>
+      <div class="flex flex-col justfiy-center items-center home"></div>
     </div>
 
-    <PopularCars />
+    <div class="w-4/5">
+      <PopularCars class="my-8" />
+    </div>
     <Statistics />
   </div>
 </template>
