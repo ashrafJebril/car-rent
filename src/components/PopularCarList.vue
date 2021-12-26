@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full">
-    <div v-for="car in sub" :key="car.id">
+    <div v-for="car in sub" :key="car.id" @click="moveTo(car)">
       <div v-if="car.cars_lists.length > 0">
         <div v-for="ad in car.cars_lists">
           <div
@@ -28,9 +28,12 @@ export default {
     this.getSubCategory();
   },
   computed: {
-    ...mapGetters(["sub"]),
+    ...mapGetters(["sub", "language"]),
   },
   methods: {
+    async moveTo(data) {
+      this.$router.push(`/${this.language}/cars/details/${data.id}`);
+    },
     ...mapActions(["getSubCategory"]),
   },
   setup() {
